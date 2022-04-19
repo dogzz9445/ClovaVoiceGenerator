@@ -18,7 +18,7 @@
             <materialDesign:Card>
                 <StackPanel Margin="8" Orientation="Horizontal">
                     <TextBlock Margin="8"
-                               Text="{Binding Path=KoreanName}" Style="{StaticResource MaterialDesignTextBlock}" />
+                               Text="{Binding KoreanName}" Style="{StaticResource MaterialDesignTextBlock}" />
                     <Button Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
                     <Button Style="{StaticResource MaterialDesignFlatSecondaryButton}"  />
                 </StackPanel>
@@ -100,7 +100,7 @@
                     <TextBlock Margin="8"
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="음성 합성 (TTS) 클로바 보이스 샘플" />
-                    <ListView x:Name="listViewVoiceSample"
+                    <ListView ItemsSource="{Binding Speakers}"
                               ItemTemplate="{DynamicResource DataTemplateVoiceSample}">
                         
                     </ListView>

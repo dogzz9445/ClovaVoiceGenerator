@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common;
 
 namespace Clova
 { 
     // TODO:
     // Json 파일로 설정 값 빼기
-    public class Speaker
+    public class Speaker : BindableBase
     {
-        public string EnglishName;
-        public string KoreanName;
-        public string Description;
+        private string _englishName;
+        public string EnglishName { get => _englishName; set => SetProperty(ref _englishName, value); }
+        private string _koreanName;
+        public string KoreanName { get => _koreanName; set => SetProperty(ref _koreanName, value); }
+        private string _description;
+        public string Description { get => _description; set => SetProperty(ref _description, value); }
 
         public Speaker(string englishName, string koreanName, string description)
         {
