@@ -1,0 +1,64 @@
+﻿<Application x:Class="VoiceGenerator.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:VoiceGenerator"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!--<ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />-->
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.DataGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Cyan.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+
+            <Style TargetType="Window"
+                   x:Key="CustomTitleBar">
+                <Setter Property="WindowChrome.WindowChrome">
+                    <Setter.Value>
+                        <WindowChrome CaptionHeight="{x:Static SystemParameters.CaptionHeight}"
+                                      GlassFrameThickness="0"
+                                      ResizeBorderThickness="3"
+                                      NonClientFrameEdges="None" />
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="WindowStyle"
+                        Value="None" />
+                <Setter Property="AllowsTransparency"
+                        Value="True" />
+                <Setter Property="BorderThickness"
+                        Value="{Binding Source={x:Static SystemParameters.WindowResizeBorderThickness}}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Window">
+                            <DockPanel LastChildFill="True">
+                                <Border Background="LightBlue"
+                                        DockPanel.Dock="Top"
+                                        Height="{x:Static SystemParameters.CaptionHeight}"
+                                        x:Name="titlebar">
+                                    <Grid>
+                                        <TextBlock Text="{TemplateBinding Title}"
+                                                   Margin="10,0,0,0"
+                                                   VerticalAlignment="Center">
+                                            <TextBlock.Effect>
+                                                <DropShadowEffect Color="White"
+                                                                  ShadowDepth="3" />
+                                            </TextBlock.Effect>
+                                        </TextBlock>
+                                    </Grid>
+                                </Border>
+                                <Border Background="{TemplateBinding Background}"
+                                        Padding="4">
+                                    <ContentPresenter />
+                                </Border>
+                            </DockPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
