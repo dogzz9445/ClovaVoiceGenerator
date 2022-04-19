@@ -29,6 +29,7 @@ namespace VoiceGenerator.View
 
             ViewModel = new HomeViewModel();
             DataContext = ViewModel;
+            listViewVoiceSample.ItemsSource = ViewModel.Speakers;
         }
     }
 }

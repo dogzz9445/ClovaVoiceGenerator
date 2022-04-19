@@ -5,9 +5,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using Clova.Type;
 
-namespace VoiceGenerator.Clova
+namespace Clova
 {
     public class ClovaVoice
     {
@@ -15,7 +14,7 @@ namespace VoiceGenerator.Clova
         string client_secret = null;
         const string URL_TTS = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
 
-        public async void RequestAsync(string text, SpeakerType type)
+        public async void RequestAsync(string text, Speaker speaker)
         {
             if (string.IsNullOrEmpty(client_id))
             {
@@ -34,10 +33,10 @@ namespace VoiceGenerator.Clova
             request.Headers.Add("X-NCP-APIGW-API-KEY-ID", client_id);
             request.Headers.Add("X-NCP-APIGW-API-KEY", client_secret);
             request.Method = "POST";
-            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={Enum.GetName(type)}&volume=0&speed=0&pitch=0&format=mp3&text={text}");
+            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={speaker.EnglishName}&volume=0&speed=0&pitch=0&format=mp3&text={text}");
             request.ContentType = "application/x-www-form-urlencoded";
             request.ContentLength = byteDataParams.Length;
-            Stream st = request.GetRequestStream();
+            Stream st = await request.GetRequestStreamAsync();
             st.Write(byteDataParams, 0, byteDataParams.Length);
             st.Close();
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();

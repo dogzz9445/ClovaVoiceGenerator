@@ -5,10 +5,28 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:VoiceGenerator.View"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:clova="clr-namespace:Clova"
       mc:Ignorable="d"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="1080" d:DesignWidth="1920"
       Title="HomePage">
+
+    <Page.Resources>
+        <!-- 데이타템플릿 보이스 샘플 -->
+        <DataTemplate x:Key="DataTemplateVoiceSample"
+                      DataType="{x:Type clova:Speaker}">
+            <materialDesign:Card>
+                <StackPanel Margin="8" Orientation="Horizontal">
+                    <TextBlock Margin="8"
+                               Text="{Binding Path=KoreanName}" Style="{StaticResource MaterialDesignTextBlock}" />
+                    <Button Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
+                    <Button Style="{StaticResource MaterialDesignFlatSecondaryButton}"  />
+                </StackPanel>
+            </materialDesign:Card>
+        </DataTemplate>
+        
+        <clova:SpeakerToStringValueConverter x:Key="SpeakerToStringValueConverter" />
+    </Page.Resources>
 
     <Grid Margin="8">
         <Grid.ColumnDefinitions>
@@ -30,30 +48,43 @@
                     <materialDesign:Card Margin="8">
                         <StackPanel>
                             <StackPanel Margin="8" Orientation="Horizontal">
-                                <TextBlock Text="음성:" />
-                                <ComboBox />
+                                <TextBlock Margin="8" Style="{StaticResource MaterialDesignTextBlock}" Text="음성:" />
+                                <ComboBox ItemsSource="{Binding Path=Speakers}"
+                                          SelectedItem="{Binding SelectedSpeaker, Mode=TwoWay}"
+                                          Margin="8"
+                                          Padding="8 4 0 4"
+                                          Width="160"
+                                          HorizontalAlignment="Center">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding  Converter={StaticResource SpeakerToStringValueConverter}}" />
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </StackPanel>
                             <TextBox Margin="8"
                                      Height="100"
-                                     Background="{StaticResource MaterialDesignTextFieldBoxBackground}" />
+                                     Background="{StaticResource MaterialDesignTextFieldBoxBackground}" 
+                                     Text="{Binding ConversionText, Mode=TwoWay}" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
                             <StackPanel Orientation="Horizontal"
                                         Margin="8"
                                         HorizontalAlignment="Right">
                                 <Button Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                         Margin="8"
-                                        Width="88">
+                                        Width="88"
+                                        Command="{Binding ClearConversionTextCommand}">
                                     <StackPanel Orientation="Horizontal"
                                                 Margin="0"
                                                 HorizontalAlignment="Left">
                                         <materialDesign:PackIcon Kind="Cancel"
                                                                  VerticalAlignment="Center" />
-                                        <TextBlock Text="  삭제" />
+                                        <TextBlock Text="  삭제"/>
                                     </StackPanel>
                                 </Button>
                                 <Button Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                         Margin="8"
                                         Width="88"
-                                        Padding="0">
+                                        Command="{Binding ConvertConversionTextCommand}">
                                     <StackPanel Orientation="Horizontal"
                                                 Margin="0"
                                                 HorizontalAlignment="Left">
@@ -69,6 +100,10 @@
                     <TextBlock Margin="8"
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="음성 합성 (TTS) 클로바 보이스 샘플" />
+                    <ListView x:Name="listViewVoiceSample"
+                              ItemTemplate="{DynamicResource DataTemplateVoiceSample}">
+                        
+                    </ListView>
                 </StackPanel>
 
             </materialDesign:Card>
