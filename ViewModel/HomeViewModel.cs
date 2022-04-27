@@ -6,11 +6,16 @@ using System.Text;
 using System.Threading.Tasks;
 using Common;
 using Clova;
+using System.Windows.Media;
+using System.Windows;
+using System.IO;
 
 namespace VoiceGenerator.ViewModel
 {
     public class HomeViewModel : BindableBase
     {
+        MediaPlayer media = new MediaPlayer();
+
         #region Properties
         private ClovaVoice _clovaVoice = null;
 
@@ -41,7 +46,23 @@ namespace VoiceGenerator.ViewModel
                 _clovaVoice.RequestAsync(ConversionText, SelectedSpeaker);
             });
         }
+
+        private DelegateCommand<Speaker> _playSample1Command;
+        public DelegateCommand<Speaker> PlaySample1Command
+        {
+            get => _playSample1Command ??= new DelegateCommand<Speaker>((speaker) =>
+            {
+                PlaySound($"voice/샘플1/{speaker.EnglishName}.wav");
+            });
+        }
         #endregion
+
+        public void PlaySound(string filename)
+        {
+            Uri soundUri = new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename));
+            Console.WriteLine(soundUri.ToString());
+            media.Open(new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename)));
+        }
 
         public HomeViewModel()
         {

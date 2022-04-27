@@ -19,8 +19,30 @@
                 <StackPanel Margin="8" Orientation="Horizontal">
                     <TextBlock Margin="8"
                                Text="{Binding KoreanName}" Style="{StaticResource MaterialDesignTextBlock}" />
-                    <Button Style="{StaticResource MaterialDesignFlatSecondaryButton}" />
-                    <Button Style="{StaticResource MaterialDesignFlatSecondaryButton}"  />
+                    <Button Margin="8" Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                            VerticalContentAlignment="Center"
+                            CommandParameter="{Binding }"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample1Command}">
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Play"
+                                                     VerticalAlignment="Center" />
+                            <TextBlock Margin="8 0" Text="샘플1" />
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="8"
+                            Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                            VerticalContentAlignment="Center">
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left">
+                            <materialDesign:PackIcon Kind="Play"
+                                                     VerticalAlignment="Center" />
+                            <TextBlock Margin="8 0"
+                                       Text="샘플2" />
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </materialDesign:Card>
         </DataTemplate>
@@ -101,9 +123,7 @@
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="음성 합성 (TTS) 클로바 보이스 샘플" />
                     <ListView ItemsSource="{Binding Speakers}"
-                              ItemTemplate="{DynamicResource DataTemplateVoiceSample}">
-                        
-                    </ListView>
+                              ItemTemplate="{DynamicResource DataTemplateVoiceSample}" />
                 </StackPanel>
 
             </materialDesign:Card>
