@@ -93,28 +93,36 @@ namespace Clova
         private Stream Request(string text)
         {
             Task<Stream> stream = RequestAsync(text);
-            stream.Wait();
             return stream.Result;
         }
 
-        private async void RequestAndSaveAsync(string filename, string text)
+        private async Task<string> RequestAndSaveAsync(string filename, string text)
         {
-            using (Stream output = PathHelper.OpenWriteNextAvailableIndex(filename))
+            var generatedFilename = PathHelper.NextAvailableIndexFilename(filename);
+            using (Stream output = PathHelper.OpenWriteOverride(generatedFilename))
             {
                 using (Stream input = await RequestAsync(text))
                 {
                     input.CopyTo(output);
                 }
             }
+            return generatedFilename;
         }
 
-        public void Generate(string text, ClovaSpeaker speaker = null)
+        private string RequestAndSave(string filename, string text)
+        {
+            Task<string> taskRequestAndSave = RequestAndSaveAsync(filename, text);
+            return taskRequestAndSave.Result;
+        }
+
+        public string Generate(string text, ClovaSpeaker speaker = null)
         {
             Speaker = speaker ?? Speaker;
             string directoryName = "Resources/voice";
             string filename = $"voice.{Format}";
             string fullFilename = Path.Combine(directoryName, filename);
-            RequestAndSaveAsync(fullFilename, text);
+            string generatedFilename = RequestAndSave(fullFilename, text);
+            return generatedFilename;
         }
     }
 }

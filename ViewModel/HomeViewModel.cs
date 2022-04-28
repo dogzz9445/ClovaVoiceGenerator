@@ -26,6 +26,9 @@ namespace VoiceGenerator.ViewModel
         private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
         public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
 
+        private readonly ObservableCollection<Sound> _sounds = new ObservableCollection<Sound>();
+        public ObservableCollection<Sound> Sounds { get => _sounds; }
+
         private ClovaSpeaker _selectedSpeaker = null;
         public ClovaSpeaker SelectedSpeaker { get => _selectedSpeaker; set => SetProperty(ref _selectedSpeaker, value); }
 
@@ -47,7 +50,8 @@ namespace VoiceGenerator.ViewModel
         {
             get => _convertConversionTextCommand ??= new DelegateCommand(() =>
             {
-                ClovaVoice.Generate(ConversionText, SelectedSpeaker);
+                string generatedFilename = ClovaVoice.Generate(ConversionText, SelectedSpeaker);
+                ConversionText = generatedFilename;
             });
         }
 

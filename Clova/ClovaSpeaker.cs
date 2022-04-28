@@ -22,7 +22,7 @@ namespace Clova
             return ClovaSpeaker.Speakers.FirstOrDefault(item => item.KoreanName == name);
         }
     }
-    // TODO:
+
     // Json 파일로 설정 값 빼기
     public class ClovaSpeaker : BindableBase
     {

@@ -127,7 +127,7 @@
                     </Border>
                 </TabItem>
                 <TabItem Style="{DynamicResource MaterialDesignNavigationRailTabItem}"
-                         Tag="HomePage">
+                         Tag="TestPage">
                     <TabItem.Header>
                         <materialDesign:PackIcon Kind="Factory"
                                                  Width="32"

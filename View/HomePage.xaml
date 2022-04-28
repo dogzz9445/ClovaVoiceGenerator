@@ -19,7 +19,8 @@
                 <StackPanel Margin="8" Orientation="Horizontal">
                     <TextBlock Margin="8"
                                Text="{Binding KoreanName}" Style="{StaticResource MaterialDesignTextBlock}" />
-                    <Button Margin="8" Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                    <Button Margin="8"
+                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
                             VerticalContentAlignment="Center"
                             CommandParameter="{Binding }"
                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample1Command}">
@@ -32,7 +33,7 @@
                         </StackPanel>
                     </Button>
                     <Button Margin="8"
-                            Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
+                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
                             VerticalContentAlignment="Center"
                             CommandParameter="{Binding }"
                             Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample2Command}">
@@ -63,13 +64,20 @@
 
         <Border Grid.Column="0"
                 Margin="8">
-            <materialDesign:Card UniformCornerRadius="8" 
+            <materialDesign:Card UniformCornerRadius="8"
                                  Background="{StaticResource MaterialDesignPaper}">
-                <StackPanel>
-                    <TextBlock Margin="8"
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="256" />
+                        <RowDefinition Height="80" />
+                        <RowDefinition Height="1*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               Margin="16"
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="음성 합성 (TTS) 클로바 보이스"/>
-                    <materialDesign:Card Margin="8">
+                    <materialDesign:Card Grid.Row="1" Margin="8">
                         <StackPanel>
                             <StackPanel Margin="8" Orientation="Horizontal">
                                 <TextBlock Margin="8" Style="{StaticResource MaterialDesignTextBlock}" Text="음성:" />
@@ -121,14 +129,16 @@
                         </StackPanel>
                     </materialDesign:Card>
 
-                    <TextBlock Margin="8"
+                    <TextBlock Grid.Row="2"
+                               Margin="16"
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="음성 합성 (TTS) 클로바 보이스 샘플" />
-                    <ListView ItemsSource="{Binding Speakers}"
+                    <ListView Grid.Row="3"
+                              ItemsSource="{Binding Speakers}"
                               ItemTemplate="{DynamicResource DataTemplateVoiceSample}"
                               ScrollViewer.VerticalScrollBarVisibility="Visible"
                               ScrollViewer.CanContentScroll="True"/>
-                </StackPanel>
+                </Grid>
 
             </materialDesign:Card>
         </Border>
