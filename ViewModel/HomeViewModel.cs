@@ -9,6 +9,7 @@ using Clova;
 using System.Windows.Media;
 using System.Windows;
 using System.IO;
+using VoiceGenerator.Model;
 
 namespace VoiceGenerator.ViewModel
 {
@@ -17,13 +18,16 @@ namespace VoiceGenerator.ViewModel
         MediaPlayer media = new MediaPlayer();
 
         #region Properties
-        private ClovaVoice _clovaVoice = null;
+        private Auth _auth;
+        private ClovaVoice _clovaVoice;
+        public Auth Auth { get => _auth ??= JsonHelper.ReadFile<Auth>("Resources/auth.json"); set => _auth = value; }
+        public ClovaVoice ClovaVoice { get => _clovaVoice ??= new ClovaVoice(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, speaker: null); set => _clovaVoice = value; }
 
-        private readonly ObservableCollection<Speaker> _speakers = new ObservableCollection<Speaker>();
-        public ObservableCollection<Speaker> Speakers { get => _speakers; }
+        private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
+        public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
 
-        private Speaker _selectedSpeaker = null;
-        public Speaker SelectedSpeaker { get => _selectedSpeaker; set => SetProperty(ref _selectedSpeaker, value); }
+        private ClovaSpeaker _selectedSpeaker = null;
+        public ClovaSpeaker SelectedSpeaker { get => _selectedSpeaker; set => SetProperty(ref _selectedSpeaker, value); }
 
         private string _conversionText;
         public string ConversionText { get => _conversionText; set => SetProperty(ref _conversionText, value); }
@@ -43,22 +47,32 @@ namespace VoiceGenerator.ViewModel
         {
             get => _convertConversionTextCommand ??= new DelegateCommand(() =>
             {
-                _clovaVoice.RequestAsync(ConversionText, SelectedSpeaker);
+                ClovaVoice.Generate(ConversionText, SelectedSpeaker);
             });
         }
 
-        private DelegateCommand<Speaker> _playSample1Command;
-        public DelegateCommand<Speaker> PlaySample1Command
+        private DelegateCommand<ClovaSpeaker> _playSample1Command;
+        public DelegateCommand<ClovaSpeaker> PlaySample1Command
         {
-            get => _playSample1Command ??= new DelegateCommand<Speaker>((speaker) =>
+            get => _playSample1Command ??= new DelegateCommand<ClovaSpeaker>((speaker) =>
             {
-                PlaySound($"voice/샘플1/{speaker.EnglishName}.wav");
+                PlaySound($"Resources/voice/샘플1/{speaker.EnglishName}.wav");
+            });
+        }
+
+        private DelegateCommand<ClovaSpeaker> _playSample2Command;
+        public DelegateCommand<ClovaSpeaker> PlaySample2Command
+        {
+            get => _playSample2Command ??= new DelegateCommand<ClovaSpeaker>((speaker) =>
+            {
+                PlaySound($"Resources/voice/샘플2/{speaker.EnglishName}.wav");
             });
         }
         #endregion
 
         public void PlaySound(string filename)
         {
+            media.Stop();
             Uri soundUri = new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename));
             Console.WriteLine(soundUri.ToString());
             media.Open(new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename)));
@@ -66,7 +80,6 @@ namespace VoiceGenerator.ViewModel
 
         public HomeViewModel()
         {
-            _clovaVoice = new ClovaVoice();
             // _clovaVoice.LoadConfig();
             Initialize();
         }
@@ -75,7 +88,7 @@ namespace VoiceGenerator.ViewModel
         {
             // 화자 데이터 가져오기, 정해져있음
             // FIXME: 혹시 API 요청으로 리스트 가져올 수 있으면 가져와서 넣어주기
-            Speaker.Speakers.ForEach(item => Speakers.Add(item));
+            ClovaSpeaker.Speakers.ForEach(item => Speakers.Add(item));
             SelectedSpeaker = Speakers.First();
         }
     }

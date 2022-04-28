@@ -17,17 +17,17 @@ using VoiceGenerator.ViewModel;
 namespace VoiceGenerator.View
 {
     /// <summary>
-    /// HomePage.xaml에 대한 상호 작용 논리
+    /// TestPage.xaml에 대한 상호 작용 논리
     /// </summary>
-    public partial class HomePage : Page
+    public partial class TestPage : Page
     {
-        public HomeViewModel ViewModel { get; set; }
+        public TestViewModel ViewModel { get; set; }
 
-        public HomePage()
+        public TestPage()
         {
             InitializeComponent();
 
-            ViewModel = new HomeViewModel();
+            ViewModel = new TestViewModel();
             DataContext = ViewModel;
         }
     }

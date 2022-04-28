@@ -126,6 +126,18 @@
                         <Frame Source="/View/HomePage.xaml" />
                     </Border>
                 </TabItem>
+                <TabItem Style="{DynamicResource MaterialDesignNavigationRailTabItem}"
+                         Tag="HomePage">
+                    <TabItem.Header>
+                        <materialDesign:PackIcon Kind="Factory"
+                                                 Width="32"
+                                                 Height="32" />
+                    </TabItem.Header>
+                    <Border CornerRadius="8"
+                            Background="#0FFFFFFF">
+                        <Frame Source="/View/TestPage.xaml" />
+                    </Border>
+                </TabItem>
             </TabControl>
         </Border>
     </DockPanel>

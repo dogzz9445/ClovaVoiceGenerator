@@ -14,7 +14,7 @@
     <Page.Resources>
         <!-- 데이타템플릿 보이스 샘플 -->
         <DataTemplate x:Key="DataTemplateVoiceSample"
-                      DataType="{x:Type clova:Speaker}">
+                      DataType="{x:Type clova:ClovaSpeaker}">
             <materialDesign:Card>
                 <StackPanel Margin="8" Orientation="Horizontal">
                     <TextBlock Margin="8"
@@ -33,7 +33,9 @@
                     </Button>
                     <Button Margin="8"
                             Style="{StaticResource MaterialDesignRaisedSecondaryButton}"
-                            VerticalContentAlignment="Center">
+                            VerticalContentAlignment="Center"
+                            CommandParameter="{Binding }"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample2Command}">
                         <StackPanel Orientation="Horizontal"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left">
@@ -123,7 +125,9 @@
                                Style="{StaticResource MaterialDesignHeadline4TextBlock}"
                                Text="음성 합성 (TTS) 클로바 보이스 샘플" />
                     <ListView ItemsSource="{Binding Speakers}"
-                              ItemTemplate="{DynamicResource DataTemplateVoiceSample}" />
+                              ItemTemplate="{DynamicResource DataTemplateVoiceSample}"
+                              ScrollViewer.VerticalScrollBarVisibility="Visible"
+                              ScrollViewer.CanContentScroll="True"/>
                 </StackPanel>
 
             </materialDesign:Card>
