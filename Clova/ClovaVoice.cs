@@ -78,9 +78,16 @@ namespace Clova
             request.ContentType = CONTENT_TYPE;
             request.ContentLength = byteDataParams.Length;
 
-            Stream requestStream = await request.GetRequestStreamAsync();
-            requestStream.Write(byteDataParams, 0, byteDataParams.Length);
-            requestStream.Close();
+            try
+            {
+                Stream requestStream = await request.GetRequestStreamAsync();
+                requestStream.Write(byteDataParams, 0, byteDataParams.Length);
+                requestStream.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             if (response.StatusCode is not >= (HttpStatusCode)200 and < (HttpStatusCode)300)
@@ -88,12 +95,6 @@ namespace Clova
                 throw new WebException($"Web request response exception: {response.StatusDescription}");
             }
             return response.GetResponseStream();
-        }
-
-        private Stream Request(string text)
-        {
-            Task<Stream> stream = RequestAsync(text);
-            return stream.Result;
         }
 
         private async Task<string> RequestAndSaveAsync(string filename, string text)
@@ -115,13 +116,13 @@ namespace Clova
             return taskRequestAndSave.Result;
         }
 
-        public string Generate(string text, ClovaSpeaker speaker = null)
+        public async Task<string> GenerateAsync(string text, ClovaSpeaker speaker = null)
         {
             Speaker = speaker ?? Speaker;
             string directoryName = "Resources/voice";
             string filename = $"voice.{Format}";
             string fullFilename = Path.Combine(directoryName, filename);
-            string generatedFilename = RequestAndSave(fullFilename, text);
+            string generatedFilename = await RequestAndSaveAsync(fullFilename, text);
             return generatedFilename;
         }
     }

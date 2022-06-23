@@ -48,10 +48,9 @@ namespace VoiceGenerator.ViewModel
         private DelegateCommand _convertConversionTextCommand;
         public DelegateCommand ConvertConversionTextCommand
         {
-            get => _convertConversionTextCommand ??= new DelegateCommand(() =>
+            get => _convertConversionTextCommand ??= new DelegateCommand(async () =>
             {
-                string generatedFilename = ClovaVoice.Generate(ConversionText, SelectedSpeaker);
-                ConversionText = generatedFilename;
+                ConversionText = await ClovaVoice.GenerateAsync(ConversionText, SelectedSpeaker);
             });
         }
 
@@ -60,7 +59,7 @@ namespace VoiceGenerator.ViewModel
         {
             get => _playSample1Command ??= new DelegateCommand<ClovaSpeaker>((speaker) =>
             {
-                PlaySound($"Resources/voice/샘플1/{speaker.EnglishName}.wav");
+                PlaySound($"Resources/voice/샘플_01/{speaker.EnglishName}.wav");
             });
         }
 
@@ -69,7 +68,7 @@ namespace VoiceGenerator.ViewModel
         {
             get => _playSample2Command ??= new DelegateCommand<ClovaSpeaker>((speaker) =>
             {
-                PlaySound($"Resources/voice/샘플2/{speaker.EnglishName}.wav");
+                PlaySound($"Resources/voice/샘플_02/{speaker.EnglishName}.wav");
             });
         }
         #endregion
