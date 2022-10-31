@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 
+#nullable enable
 namespace Common
 {
     public class BindingProxy : Freezable

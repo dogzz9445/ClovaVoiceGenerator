@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 # Secret
 **/auth.json
+**/secret.json

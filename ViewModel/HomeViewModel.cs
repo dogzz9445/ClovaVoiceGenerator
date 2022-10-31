@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common;
-using Clova;
+using VoiceGenerator.Clova;
 using System.Windows.Media;
 using System.Windows;
 using System.IO;
@@ -19,9 +19,13 @@ namespace VoiceGenerator.ViewModel
 
         #region Properties
         private Auth _auth;
+        public Auth Auth { get => _auth; set => SetProperty(ref _auth, value); }
         private ClovaVoice _clovaVoice;
-        public Auth Auth { get => _auth ??= JsonHelper.ReadFile<Auth>("Resources/auth.json"); set => _auth = value; }
-        public ClovaVoice ClovaVoice { get => _clovaVoice ??= new ClovaVoice(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, speaker: null); set => _clovaVoice = value; }
+        public ClovaVoice ClovaVoice 
+        { 
+            get => _clovaVoice ??= new ClovaVoice(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, speaker: null); 
+            set => _clovaVoice = value;
+        }
 
         private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
         public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
@@ -59,7 +63,7 @@ namespace VoiceGenerator.ViewModel
         {
             get => _playSample1Command ??= new DelegateCommand<ClovaSpeaker>((speaker) =>
             {
-                PlaySound($"Resources/voice/샘플_01/{speaker.EnglishName}.wav");
+                PlaySound($"Resources/voice/샘플_01/{speaker.Name}.wav");
             });
         }
 
@@ -68,7 +72,7 @@ namespace VoiceGenerator.ViewModel
         {
             get => _playSample2Command ??= new DelegateCommand<ClovaSpeaker>((speaker) =>
             {
-                PlaySound($"Resources/voice/샘플_02/{speaker.EnglishName}.wav");
+                PlaySound($"Resources/voice/샘플_02/{speaker.Name}.wav");
             });
         }
         #endregion
@@ -77,7 +81,6 @@ namespace VoiceGenerator.ViewModel
         {
             media.Stop();
             Uri soundUri = new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename));
-            Console.WriteLine(soundUri.ToString());
             media.Open(new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename)));
         }
 
@@ -87,12 +90,14 @@ namespace VoiceGenerator.ViewModel
             Initialize();
         }
 
-        private void Initialize()
+        private async void Initialize()
         {
             // 화자 데이터 가져오기, 정해져있음
             // FIXME: 혹시 API 요청으로 리스트 가져올 수 있으면 가져와서 넣어주기
+            _auth = await JsonHelper.ReadFileAsync<Auth>("Resources/auth.json");
+            await ClovaSpeaker.LoadSpeakers("Resources/speakers.json");
             ClovaSpeaker.Speakers.ForEach(item => Speakers.Add(item));
-            SelectedSpeaker = Speakers.First();
+            SelectedSpeaker = Speakers.FirstOrDefault();
         }
     }
 }

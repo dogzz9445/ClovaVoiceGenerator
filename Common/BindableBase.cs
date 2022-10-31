@@ -7,13 +7,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+#nullable enable
 namespace Common
 {
     public class BindableBase : INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
+        protected bool? SetProperty<T>(ref T storage, T value, [CallerMemberName] string? propertyName = null)
         {
             if (Equals(storage, value))
             {
@@ -24,13 +25,13 @@ namespace Common
             return true;
         }
 
-        protected bool SetObservableProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null) where T : INotifyPropertyChanged
+        protected bool? SetObservableProperty<T>(ref T? storage, T value, [CallerMemberName] string? propertyName = null) where T : INotifyPropertyChanged
         {
             if (storage != null)
             {
                 storage.PropertyChanged -= new PropertyChangedEventHandler(RaisePropertyChangedEvent);
             }
-            bool result = SetProperty(ref storage, value);
+            bool? result = SetProperty(ref storage, value);
             if (storage != null)
             {
                 storage.PropertyChanged += new PropertyChangedEventHandler(RaisePropertyChangedEvent);
@@ -38,13 +39,13 @@ namespace Common
             return result;
         }
 
-        protected bool SetCollectionProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null) where T : INotifyCollectionChanged
+        protected bool? SetCollectionProperty<T>(ref T? storage, T value, [CallerMemberName] string? propertyName = null) where T : INotifyCollectionChanged
         {
             if (storage != null)
             {
                 storage.CollectionChanged -= new NotifyCollectionChangedEventHandler(RaisePropertyChangedEvent);
             }
-            bool result = SetProperty(ref storage, value);
+            bool? result = SetProperty(ref storage, value);
             if (storage != null)
             {
                 storage.CollectionChanged += new NotifyCollectionChangedEventHandler(RaisePropertyChangedEvent);
@@ -59,7 +60,7 @@ namespace Common
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        protected void RaisePropertyChangedEvent(object sender, PropertyChangedEventArgs eventArgs)
+        protected void RaisePropertyChangedEvent(object? sender, PropertyChangedEventArgs eventArgs)
         {
             PropertyChanged?.Invoke(sender, eventArgs);
         }

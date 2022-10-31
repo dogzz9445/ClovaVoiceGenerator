@@ -7,18 +7,12 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Clova
+namespace VoiceGenerator.Clova
 {
-    public enum ClovaSoundFormat
-    {
-        mp3,
-        wav
-    }
-
     public class ClovaVoice
     {
         #region 정적 Property
-        private const string URL_TTS = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
+        private const string URL_CLOVE_TTS = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
         private const string REQUEST_HEADER_KEY_ID = "X-NCP-APIGW-API-KEY-ID";
         private const string REQUEST_HEADER_KEY = "X-NCP-APIGW-API-KEY";
         private const string REQUEST_METHOD = "POST";
@@ -27,31 +21,29 @@ namespace Clova
 
         private string _clientId;
         private string _clientSecret;
-        private int _volume;
-        private int _speed;
-        private int _pitch;
-        private ClovaSoundFormat _format;
+        private ClovaSettings _settings;
         private ClovaSpeaker _speaker;
 
-        public ClovaSoundFormat Format { get => _format; set => _format = value; }
-        public ClovaSpeaker Speaker { get => _speaker ??= ClovaSpeaker.Speakers.FirstOrDefault(item => item.KoreanName == "아라"); set => _speaker = value; }
+        public ClovaSettings Settings { get => _settings; set => _settings = value; }
+        public ClovaSpeaker Speaker { get => _speaker; set => _speaker = value; }
 
         public ClovaVoice(
             string clientId,
             string clientSecret,
-            int? volume = null,
-            int? speed = null,
-            int? pitch = null,
-            ClovaSoundFormat? format = null,
+            ClovaSettings settings = null,
             ClovaSpeaker speaker = null)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
-            _volume = volume ?? 0;
-            _speed = speed ?? 0;
-            _pitch = pitch ?? 0;
-            Format = format ?? ClovaSoundFormat.wav;
-            Speaker = speaker ?? Speaker;
+            _settings = settings ??= new ClovaSettings();
+            _speaker = speaker ??= ClovaSpeaker.Speakers.FirstOrDefault(item => item.KoreanName == "아라");
+
+            Initialize();
+        }
+
+        private void Initialize()
+        {
+
         }
 
         private async Task<Stream> RequestAsync(string text)
@@ -69,9 +61,9 @@ namespace Clova
                 throw new ArgumentNullException("Null is ", nameof(text));
             }
 
-            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={Speaker.EnglishName}&volume={_volume}&speed={_speed}&pitch={_pitch}&format={Format}&text={text}");
+            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={Speaker.Name}&volume={Settings.Volume}&speed={Settings.Speed}&pitch={Settings.Pitch}&format={Settings.Format}&text={text}");
 
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL_TTS);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL_CLOVE_TTS);
             request.Method = REQUEST_METHOD;
             request.Headers.Add(REQUEST_HEADER_KEY_ID, _clientId);
             request.Headers.Add(REQUEST_HEADER_KEY, _clientSecret);
@@ -110,17 +102,11 @@ namespace Clova
             return generatedFilename;
         }
 
-        private string RequestAndSave(string filename, string text)
-        {
-            Task<string> taskRequestAndSave = RequestAndSaveAsync(filename, text);
-            return taskRequestAndSave.Result;
-        }
-
         public async Task<string> GenerateAsync(string text, ClovaSpeaker speaker = null)
         {
             Speaker = speaker ?? Speaker;
             string directoryName = "Resources/voice";
-            string filename = $"voice.{Format}";
+            string filename = $"voice.{Settings.Format}";
             string fullFilename = Path.Combine(directoryName, filename);
             string generatedFilename = await RequestAndSaveAsync(fullFilename, text);
             return generatedFilename;

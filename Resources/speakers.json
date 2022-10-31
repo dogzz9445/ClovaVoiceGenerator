@@ -1,0 +1,392 @@
+[
+  {
+    "name": "nara",
+    "korean_name": "아라",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nara_call",
+    "korean_name": "아라(상담원)",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nminyoung",
+    "korean_name": "민영",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nyejin",
+    "korean_name": "예진",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "mijin",
+    "korean_name": "미진",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "jinho",
+    "korean_name": "진호",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "clara",
+    "korean_name": "클라라",
+    "language": "영어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "matt",
+    "korean_name": "매트",
+    "language": "영어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "shinji",
+    "korean_name": "신지",
+    "language": "일본어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "meimei",
+    "korean_name": "메이메이",
+    "language": "중국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "liangliang",
+    "korean_name": "량량",
+    "language": "중국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "jose",
+    "korean_name": "호세",
+    "language": "스페인어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "carmen",
+    "korean_name": "카르멘",
+    "language": "스페인어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nminsang",
+    "korean_name": "민상",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nsinu",
+    "korean_name": "신우",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nhajun",
+    "korean_name": "하준",
+    "language": "한국어",
+    "description": "아동 음색 (남)"
+  },
+  {
+    "name": "ndain",
+    "korean_name": "다인",
+    "language": "한국어",
+    "description": "아동음색 (여)"
+  },
+  {
+    "name": "njiyun",
+    "korean_name": "지윤",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nsujin",
+    "korean_name": "수진",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "njinho",
+    "korean_name": "진호",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "njihun",
+    "korean_name": "지훈",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "njooahn",
+    "korean_name": "주안",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nseonghoon",
+    "korean_name": "성훈",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "njihwan",
+    "korean_name": "지환",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nsiyoon",
+    "korean_name": "시윤",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "ngaram",
+    "korean_name": "가람",
+    "language": "한국어",
+    "description": "아동음색 (여)"
+  },
+  {
+    "name": "ntomoko",
+    "korean_name": "토모코",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nnaomi",
+    "korean_name": "나오미",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "dnaomi_joyful",
+    "korean_name": "나오미(기쁨)",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "dnaomi_formal",
+    "korean_name": "나오미(뉴스)",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "driko",
+    "korean_name": "리코",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "deriko",
+    "korean_name": "에리코",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nsayuri",
+    "korean_name": "사유리",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "ngoeun",
+    "korean_name": "고은",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "neunyoung",
+    "korean_name": "은영",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nsunkyung",
+    "korean_name": "선경",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nyujin",
+    "korean_name": "유진",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "ntaejin",
+    "korean_name": "태진",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nyoungil",
+    "korean_name": "영일",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nseungpyo",
+    "korean_name": "승표",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nwontak",
+    "korean_name": "원탁",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "dara_ang",
+    "korean_name": "아라(화남)",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nsunhee",
+    "korean_name": "선희",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nminseo",
+    "korean_name": "민서",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "njiwon",
+    "korean_name": "지원",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nbora",
+    "korean_name": "보라",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "njonghyun",
+    "korean_name": "종현",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "njoonyoung",
+    "korean_name": "준영",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "njaewook",
+    "korean_name": "재욱",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "danna",
+    "korean_name": "안나",
+    "language": "영어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "djoey",
+    "korean_name": "조이",
+    "language": "영어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "dhajime",
+    "korean_name": "하지메",
+    "language": "일본어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "ddaiki",
+    "korean_name": "다이키",
+    "language": "일본어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "dayumu",
+    "korean_name": "아유무",
+    "language": "일본어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "dmio",
+    "korean_name": "미오",
+    "language": "일본어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "chiahua",
+    "korean_name": "차화",
+    "language": "대만어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "kuanlin",
+    "korean_name": "관린",
+    "language": "대만어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "nes_c_hyeri",
+    "korean_name": "혜리",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nes_c_sohyun",
+    "korean_name": "소현",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nes_c_mikyung",
+    "korean_name": "미경",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "nes_c_kihyo",
+    "korean_name": "기효",
+    "language": "한국어",
+    "description": "남성 음색"
+  },
+  {
+    "name": "ntiffany",
+    "korean_name": "기서",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "napple",
+    "korean_name": "늘봄",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "njangj",
+    "korean_name": "드림",
+    "language": "한국어",
+    "description": "여성 음색"
+  },
+  {
+    "name": "noyj",
+    "korean_name": "봄달",
+    "language": "한국어",
+    "description": "여성 음색"
+  }
+]

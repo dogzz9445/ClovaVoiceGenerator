@@ -1,25 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 using Common;
-using Newtonsoft.Json;
 
 namespace VoiceGenerator.Model
 {
     public class Sound : BindableBase
     {
-        [JsonProperty("SoundType")]
+        [JsonPropertyName("SoundType")]
         private int _soundType = 2;
-        [JsonProperty("SoundName")]
+        [JsonPropertyName("SoundName")]
         private string _soundName = "";
-        [JsonProperty("LoopingUse")]
+        [JsonPropertyName("LoopingUse")]
         private int _loopingUse = -1;
 
-        [JsonProperty("SoundText")]
+        [JsonPropertyName("SoundText")]
         private string _soundText;
-        [JsonProperty("Description")]
+        [JsonPropertyName("Description")]
         private string _description;
     }
 }

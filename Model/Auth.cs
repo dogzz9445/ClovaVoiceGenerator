@@ -1,17 +1,13 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
+using Common;
 
 namespace VoiceGenerator.Model
 {
-    public class Auth
+    public class Auth : BindableBase
     {
-        [JsonProperty("client_id")]
+        [JsonPropertyName("client_id")]
         private string _client_id;
-        [JsonProperty("client_secret")]
+        [JsonPropertyName("client_secret")]
         private string _client_secret;
 
         [JsonIgnore]
