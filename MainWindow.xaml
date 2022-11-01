@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         AllowsTransparency="True"
-        Title="MainWindow"
+        Title="Voice Generator (Clova)"
         Background="#F8242424"
         TextElement.Foreground="{DynamicResource MaterialDesignBody}"
         FontFamily="{DynamicResource MaterialDesignFont}"
@@ -75,7 +75,7 @@
                     <ColumnDefinition Width="24" />
                     <ColumnDefinition Width="24" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Voice Generator"
+                <TextBlock Text="Voice Generator (Clova)"
                            Margin="10,0,0,0"
                            VerticalAlignment="Center">
                     <TextBlock.Effect>

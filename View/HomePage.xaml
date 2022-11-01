@@ -16,41 +16,52 @@
         <!-- 데이타템플릿 보이스 샘플 -->
         <DataTemplate x:Key="DataTemplateVoiceSample"
                       DataType="{x:Type clova:ClovaSpeaker}">
-            <materialDesign:Card>
-                <StackPanel Margin="8"
-                            Orientation="Horizontal">
-                    <TextBlock Margin="8"
+            <materialDesign:Card HorizontalContentAlignment="Stretch"
+                                 HorizontalAlignment="Stretch"
+                                 Background="#12FFFFFF">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="220" />
+                        <ColumnDefinition Width="1*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0"
+                               Margin="8"
+                               VerticalAlignment="Center"
                                Text="{Binding KoreanName}"
                                Style="{StaticResource MaterialDesignTextBlock}" />
-                    <Button Margin="8"
-                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                            VerticalContentAlignment="Center"
-                            CommandParameter="{Binding }"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample1Command}">
-                        <StackPanel Orientation="Horizontal"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="Play"
-                                                     VerticalAlignment="Center" />
-                            <TextBlock Margin="8 0"
-                                       Text="샘플1" />
-                        </StackPanel>
-                    </Button>
-                    <Button Margin="8"
-                            Style="{StaticResource MaterialDesignRaisedDarkButton}"
-                            VerticalContentAlignment="Center"
-                            CommandParameter="{Binding }"
-                            Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample2Command}">
-                        <StackPanel Orientation="Horizontal"
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Left">
-                            <materialDesign:PackIcon Kind="Play"
-                                                     VerticalAlignment="Center" />
-                            <TextBlock Margin="8 0"
-                                       Text="샘플2" />
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <Button Margin="8"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                VerticalContentAlignment="Center"
+                                CommandParameter="{Binding }"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample1Command}">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Play"
+                                                         VerticalAlignment="Center" />
+                                <TextBlock Margin="8 0"
+                                           Text="샘플1" />
+                            </StackPanel>
+                        </Button>
+                        <Button Margin="8"
+                                Style="{StaticResource MaterialDesignRaisedDarkButton}"
+                                VerticalContentAlignment="Center"
+                                CommandParameter="{Binding }"
+                                Command="{Binding RelativeSource={RelativeSource AncestorType={x:Type ListView}, Mode=FindAncestor}, Path=DataContext.PlaySample2Command}">
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Left">
+                                <materialDesign:PackIcon Kind="Play"
+                                                         VerticalAlignment="Center" />
+                                <TextBlock Margin="8 0"
+                                           Text="샘플2" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </Grid>
             </materialDesign:Card>
         </DataTemplate>
 
@@ -59,9 +70,17 @@
 
     <Grid Margin="8">
         <Grid.RowDefinitions>
-            <RowDefinition Height="80" />
+            <RowDefinition Height="72" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock Grid.Row="0"
+                       Margin="16"
+                       Style="{StaticResource MaterialDesignHeadline4TextBlock}"
+                       FontWeight="Bold"
+                       Text="음성 합성 (TTS) 클로바 보이스" />
+        </Grid>
+        
         <Grid Grid.Row="1"
               Margin="8">
             <Grid.ColumnDefinitions>
@@ -76,12 +95,56 @@
                     Margin="8">
 
                 <materialDesign:Card UniformCornerRadius="8"
-                                     Background="{StaticResource MaterialDesignPaper}">
+                                     Background="#12FFFFFF">
                     <StackPanel>
                         <TextBlock Grid.Row="0"
                                    Margin="16"
-                                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                                   Text="음성 합성 (TTS) 클로바 보이스" />
+                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                   Text="음성 합성 설정" />
+                        <Slider Minimum="0"
+                                Maximum="50"
+                                Value="35" />
+                        <Slider Minimum="0"
+                                Maximum="50"
+                                Value="35" />
+                        <Slider Minimum="0"
+                                Maximum="50"
+                                Value="35" />
+                        <Slider TickFrequency="5"
+                                Orientation="Horizontal"
+                                TickPlacement="BottomRight"
+                                Minimum="0"
+                                Maximum="50"
+                                Value="10"
+                                SelectionStart="0"
+                                SelectionEnd="20"
+                                IsSelectionRangeEnabled="True" />
+                        <ListBox Style="{StaticResource MaterialDesignChoiceChipPrimaryListBox}"
+                                 x:Name="RadioButtonGroupChoiceChipPrimary">
+                            <ListBoxItem Content="Mercury" />
+                            <ListBoxItem IsSelected="True"
+                                         Content="Venus" />
+                            <ListBoxItem Content="Earth" />
+                            <ListBoxItem IsEnabled="False"
+                                         Content="Pluto" />
+                        </ListBox>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="8"
+                                       Style="{StaticResource MaterialDesignTextBlock}"
+                                       Text="음성:" />
+                            <ComboBox ItemsSource="{Binding Path=Speakers}"
+                                      SelectedItem="{Binding SelectedSpeaker, Mode=TwoWay}"
+                                      Margin="8"
+                                      Padding="8 4 0 4"
+                                      Width="160"
+                                      HorizontalAlignment="Center">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding  Converter={StaticResource SpeakerToStringValueConverter}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
                     </StackPanel>
                 </materialDesign:Card>
             </Border>
@@ -89,38 +152,35 @@
             <Border Grid.Column="2"
                     Margin="8">
                 <materialDesign:Card UniformCornerRadius="8"
-                                     Background="{StaticResource MaterialDesignPaper}">
+                                     materialDesign:ElevationAssist.Elevation="Dp8"
+                                     Background="#12FFFFFF">
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="80" />
-                            <RowDefinition Height="256" />
-                            <RowDefinition Height="80" />
+                            <RowDefinition Height="64" />
+                            <RowDefinition Height="240" />
+                            <RowDefinition Height="64" />
                             <RowDefinition Height="1*" />
                         </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0"
                                    Margin="16"
-                                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                                   Text="음성 합성 (TTS) 클로바 보이스" />
+                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                   Text="음성 합성" />
                         <materialDesign:Card Grid.Row="1"
                                              Margin="8">
                             <StackPanel>
-                                <StackPanel Margin="8"
-                                            Orientation="Horizontal">
-                                    <TextBlock Margin="8"
-                                               Style="{StaticResource MaterialDesignTextBlock}"
-                                               Text="음성:" />
-                                    <ComboBox ItemsSource="{Binding Path=Speakers}"
-                                              SelectedItem="{Binding SelectedSpeaker, Mode=TwoWay}"
-                                              Margin="8"
-                                              Padding="8 4 0 4"
-                                              Width="160"
-                                              HorizontalAlignment="Center">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding  Converter={StaticResource SpeakerToStringValueConverter}}" />
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
+                                <TextBlock Margin="16 8"
+                                           VerticalAlignment="Center"
+                                           Style="{StaticResource MaterialDesignTextBlock}"
+                                           Text="음성 합성 문장 :" />
+                                <TextBox Margin="8 0"
+                                         Height="100"
+                                         Background="{StaticResource MaterialDesignTextFieldBoxBackground}"
+                                         Text="{Binding ConversionText, Mode=TwoWay}"
+                                         TextWrapping="Wrap"
+                                         VerticalScrollBarVisibility="Auto" />
+                                <StackPanel Orientation="Horizontal"
+                                            Margin="8"
+                                            HorizontalAlignment="Right">
                                     <Button Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                             Margin="8">
                                         <StackPanel Orientation="Horizontal"
@@ -132,16 +192,6 @@
                                                        Text="파일위치 열기" />
                                         </StackPanel>
                                     </Button>
-                                </StackPanel>
-                                <TextBox Margin="8"
-                                         Height="100"
-                                         Background="{StaticResource MaterialDesignTextFieldBoxBackground}"
-                                         Text="{Binding ConversionText, Mode=TwoWay}"
-                                         TextWrapping="Wrap"
-                                         VerticalScrollBarVisibility="Auto" />
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="8"
-                                            HorizontalAlignment="Right">
                                     <Button Style="{StaticResource MaterialDesignRaisedDarkButton}"
                                             Margin="8"
                                             Command="{Binding ClearConversionTextCommand}">
@@ -162,22 +212,37 @@
                                                     HorizontalAlignment="Left">
                                             <materialDesign:PackIcon Kind="Download"
                                                                      VerticalAlignment="Center" />
-                                            <TextBlock Text="  합성" />
+                                            <TextBlock Margin="8 0 0 0" Text="합성" />
                                         </StackPanel>
                                     </Button>
+                                    <Grid Width="124">
+                                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                                materialDesign:ButtonProgressAssist.Value="-1"
+                                                materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
+                                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                                Content="Indeterminate"
+                                                Margin="2,0"
+                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                                    </Grid>
                                 </StackPanel>
                             </StackPanel>
                         </materialDesign:Card>
 
                         <TextBlock Grid.Row="2"
                                    Margin="16"
-                                   Style="{StaticResource MaterialDesignHeadline4TextBlock}"
-                                   Text="음성 합성 (TTS) 클로바 보이스 샘플" />
-                        <ListView Grid.Row="3"
-                                  ItemsSource="{Binding Speakers}"
-                                  ItemTemplate="{DynamicResource DataTemplateVoiceSample}"
-                                  ScrollViewer.VerticalScrollBarVisibility="Visible"
-                                  ScrollViewer.CanContentScroll="True" />
+                                   Style="{StaticResource MaterialDesignHeadline5TextBlock}"
+                                   Text="보이스 샘플" />
+                        <Grid Grid.Row="3"
+                              Margin="8"
+                              Background="#12FFFFFF"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch">
+                            <ListView ItemsSource="{Binding Speakers}"
+                                      ItemTemplate="{DynamicResource DataTemplateVoiceSample}"
+                                      HorizontalContentAlignment="Stretch"
+                                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                      ScrollViewer.CanContentScroll="True" />
+                        </Grid>
                     </Grid>
 
                 </materialDesign:Card>
