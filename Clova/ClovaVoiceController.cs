@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoiceGenerator.Clova
 {
-    public class ClovaVoice
+    public class ClovaVoiceController : BindableBase
     {
         #region 정적 Property
         private const string URL_CLOVE_TTS = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
@@ -21,29 +21,68 @@ namespace VoiceGenerator.Clova
 
         private string _clientId;
         private string _clientSecret;
-        private ClovaSettings _settings;
+        private TTSSettings _settings;
         private ClovaSpeaker _speaker;
 
-        public ClovaSettings Settings { get => _settings; set => _settings = value; }
+        public TTSSettings Settings { get => _settings; set => _settings = value; }
         public ClovaSpeaker Speaker { get => _speaker; set => _speaker = value; }
 
-        public ClovaVoice(
+        public List<ClovaSpeaker> _speakers;
+        public List<ClovaSpeaker> Speakers { get => _speakers ??= new List<ClovaSpeaker>(); }
+
+        public ClovaVoiceController(
             string clientId,
             string clientSecret,
-            ClovaSettings settings = null,
+            TTSSettings settings = null,
             ClovaSpeaker speaker = null)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
-            _settings = settings ??= new ClovaSettings();
-            _speaker = speaker ??= ClovaSpeaker.Speakers.FirstOrDefault(item => item.KoreanName == "아라");
-
-            Initialize();
+            _settings = settings ??= new TTSSettings();
+            _speaker = speaker ??= Speakers.FirstOrDefault(item => item.KoreanName == "아라");
         }
 
-        private void Initialize()
+        public async Task Initialize()
         {
+            await LoadSpeakers("Resources/speakers.json");
+        }
 
+        public async Task<List<ClovaSpeaker>> LoadSpeakers(string fileName)
+        {
+            var speakers = await JsonHelper.ReadFileAsync<List<ClovaSpeaker>>(fileName);
+            if (speakers != null)
+            {
+                Speakers.AddRange(speakers);
+            }
+            return Speakers;
+        }
+
+        public string ConvertKoreanToEnglish(string korean)
+        {
+            if (string.IsNullOrEmpty(korean))
+            {
+                return null;
+            }
+            var speaker = Speakers.FirstOrDefault(item => item.KoreanName == korean);
+            if (speaker == null)
+            {
+                return null;
+            }
+            return speaker.Name;
+        }
+
+        public string ConvertEnglishToKorean(string english)
+        {
+            if (string.IsNullOrEmpty(english))
+            {
+                return null;
+            }
+            var speaker = Speakers.FirstOrDefault(item => item.Name == english);
+            if (speaker == null)
+            {
+                return null;
+            }
+            return speaker.KoreanName;
         }
 
         private async Task<Stream> RequestAsync(string text)

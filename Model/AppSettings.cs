@@ -9,7 +9,7 @@ namespace VoiceGenerator.Model
 {
     public class AppSettings
     {
-        private ClovaSettings _clovaSettings;
-        public ClovaSettings ClovaSettings { get => _clovaSettings; set => _clovaSettings = value; }
+        private TTSSettings _ttsSettings;
+        public TTSSettings TTSSettings { get => _ttsSettings; set => _ttsSettings = value; }
     }
 }

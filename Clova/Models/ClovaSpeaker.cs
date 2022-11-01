@@ -36,39 +36,6 @@ namespace VoiceGenerator.Clova
             KoreanName = koreanName;
             Description = description;
         }
-
-        public static async Task LoadSpeakers(string fileName)
-        {
-            var speakers = await JsonHelper.ReadFileAsync<List<ClovaSpeaker>>(fileName);
-            if (speakers == null)
-            {
-                return;
-            }
-            Speakers.AddRange(speakers);
-        }
-
-        public static List<ClovaSpeaker>? _speakers;
-        public static List<ClovaSpeaker> Speakers { get => _speakers ??= new List<ClovaSpeaker>(); }
-
-        public static string? ConvertKoreanToEnglish(string korean)
-        {
-            var speaker = Speakers.FirstOrDefault(item => item.KoreanName == korean);
-            if (speaker != null)
-            {
-                return speaker.Name;
-            }
-            return null;
-        }
-
-        public static string? ConvertEnglishToKorean(string english)
-        {
-            var speaker = Speakers.FirstOrDefault(item => item.Name == english);
-            if (speaker != null)
-            {
-                return speaker.KoreanName;
-            }
-            return null;
-        }
     }
 
 }

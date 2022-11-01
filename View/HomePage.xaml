@@ -219,7 +219,7 @@
                                         <Button Style="{StaticResource MaterialDesignRaisedButton}"
                                                 materialDesign:ButtonProgressAssist.Value="-1"
                                                 materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
-                                                materialDesign:ButtonProgressAssist.IsIndeterminate="True"
+                                                materialDesign:ButtonProgressAssist.IsIndeterminate="False"
                                                 Content="Indeterminate"
                                                 Margin="2,0"
                                                 IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />

@@ -14,7 +14,7 @@ namespace VoiceGenerator.Clova
         mp3,
     }
 
-    public class ClovaSettings
+    public class TTSSettings
     {
         [JsonIgnore]
         private int? _volume;

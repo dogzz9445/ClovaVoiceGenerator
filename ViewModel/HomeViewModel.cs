@@ -20,12 +20,12 @@ namespace VoiceGenerator.ViewModel
         #region Properties
         private Auth _auth;
         public Auth Auth { get => _auth; set => SetProperty(ref _auth, value); }
-        private ClovaVoice _clovaVoice;
-        public ClovaVoice ClovaVoice 
-        { 
-            get => _clovaVoice ??= new ClovaVoice(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, speaker: null); 
-            set => _clovaVoice = value;
-        }
+
+        private ClovaVoiceController _clovaVoiceController;
+        public ClovaVoiceController ClovaVoiceController { get => _clovaVoiceController; set => SetProperty(ref _clovaVoiceController, value); }
+
+        private AppSettings _appSettings;
+        public AppSettings AppSettings { get => _appSettings; set => SetProperty(ref _appSettings, value); }
 
         private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
         public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
@@ -54,7 +54,7 @@ namespace VoiceGenerator.ViewModel
         {
             get => _convertConversionTextCommand ??= new DelegateCommand(async () =>
             {
-                ConversionText = await ClovaVoice.GenerateAsync(ConversionText, SelectedSpeaker);
+                ConversionText = await ClovaVoiceController.GenerateAsync(ConversionText, SelectedSpeaker);
             });
         }
 
@@ -86,7 +86,6 @@ namespace VoiceGenerator.ViewModel
 
         public HomeViewModel()
         {
-            // _clovaVoice.LoadConfig();
             Initialize();
         }
 
@@ -94,9 +93,12 @@ namespace VoiceGenerator.ViewModel
         {
             // 화자 데이터 가져오기, 정해져있음
             // FIXME: 혹시 API 요청으로 리스트 가져올 수 있으면 가져와서 넣어주기
+            _appSettings = await JsonHelper.ReadFileAsync<AppSettings>("Resources/appsettings.json");
             _auth = await JsonHelper.ReadFileAsync<Auth>("Resources/auth.json");
-            await ClovaSpeaker.LoadSpeakers("Resources/speakers.json");
-            ClovaSpeaker.Speakers.ForEach(item => Speakers.Add(item));
+            _clovaVoiceController = new ClovaVoiceController(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, settings: _appSettings.TTSSettings);
+            await _clovaVoiceController.Initialize();
+            _clovaVoiceController.Speakers.ForEach(item => Speakers.Add(item));
+
             SelectedSpeaker = Speakers.FirstOrDefault();
         }
     }
