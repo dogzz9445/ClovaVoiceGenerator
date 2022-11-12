@@ -364,6 +364,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\images\" />
+  </ItemGroup>
+
   <ProjectExtensions><VisualStudio><UserProperties resources_4appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
 
 </Project>

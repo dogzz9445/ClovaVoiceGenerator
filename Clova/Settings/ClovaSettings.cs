@@ -5,16 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json.Serialization;
 
+using Common;
+
 #nullable enable
 namespace VoiceGenerator.Clova
 {
+    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ClovaSoundFormat
     {
         wav,
         mp3,
     }
 
-    public class TTSSettings
+    public class ClovaSettings : BindableBase
     {
         [JsonIgnore]
         private int? _volume;

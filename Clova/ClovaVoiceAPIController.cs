@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoiceGenerator.Clova
 {
-    public class ClovaVoiceController : BindableBase
+    public class ClovaVoiceAPIController : BindableBase
     {
         #region 정적 Property
         private const string URL_CLOVE_TTS = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
@@ -19,32 +19,35 @@ namespace VoiceGenerator.Clova
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
         #endregion
 
+        private const string SpeakerListFileName = "Resources/speakers.json";
+
         private string _clientId;
         private string _clientSecret;
-        private TTSSettings _settings;
-        private ClovaSpeaker _speaker;
 
-        public TTSSettings Settings { get => _settings; set => _settings = value; }
-        public ClovaSpeaker Speaker { get => _speaker; set => _speaker = value; }
+        private ClovaSettings _settings;
+        public ClovaSettings Settings { get => _settings; set => _settings = value; }
+        
+        private ClovaSpeaker _selectedSpeaker;
+        public ClovaSpeaker SelectedSpeaker { get => _selectedSpeaker; set => _selectedSpeaker = value; }
 
         public List<ClovaSpeaker> _speakers;
         public List<ClovaSpeaker> Speakers { get => _speakers ??= new List<ClovaSpeaker>(); }
 
-        public ClovaVoiceController(
+        public ClovaVoiceAPIController(
             string clientId,
             string clientSecret,
-            TTSSettings settings = null,
+            ClovaSettings settings = null,
             ClovaSpeaker speaker = null)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
-            _settings = settings ??= new TTSSettings();
-            _speaker = speaker ??= Speakers.FirstOrDefault(item => item.KoreanName == "아라");
+            _settings = settings ??= new ClovaSettings();
+            _selectedSpeaker = speaker ??= Speakers.FirstOrDefault(item => item.KoreanName == "아라");
         }
 
         public async Task Initialize()
         {
-            await LoadSpeakers("Resources/speakers.json");
+            await LoadSpeakers(SpeakerListFileName);
         }
 
         public async Task<List<ClovaSpeaker>> LoadSpeakers(string fileName)
@@ -100,7 +103,7 @@ namespace VoiceGenerator.Clova
                 throw new ArgumentNullException("Null is ", nameof(text));
             }
 
-            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={Speaker.Name}&volume={Settings.Volume}&speed={Settings.Speed}&pitch={Settings.Pitch}&format={Settings.Format}&text={text}");
+            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={SelectedSpeaker.Name}&volume={Settings.Volume}&speed={Settings.Speed}&pitch={Settings.Pitch}&format={Settings.Format}&text={text}");
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL_CLOVE_TTS);
             request.Method = REQUEST_METHOD;
@@ -143,7 +146,7 @@ namespace VoiceGenerator.Clova
 
         public async Task<string> GenerateAsync(string text, ClovaSpeaker speaker = null)
         {
-            Speaker = speaker ?? Speaker;
+            SelectedSpeaker = speaker ?? SelectedSpeaker;
             string directoryName = "Resources/voice";
             string filename = $"voice.{Settings.Format}";
             string fullFilename = Path.Combine(directoryName, filename);

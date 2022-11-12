@@ -10,6 +10,8 @@ using System.Windows.Media;
 using System.Windows;
 using System.IO;
 using VoiceGenerator.Model;
+using System.ComponentModel;
+using VoiceGenerator.Common;
 
 namespace VoiceGenerator.ViewModel
 {
@@ -18,14 +20,20 @@ namespace VoiceGenerator.ViewModel
         MediaPlayer media = new MediaPlayer();
 
         #region Properties
-        private Auth _auth;
-        public Auth Auth { get => _auth; set => SetProperty(ref _auth, value); }
+        private static readonly AsyncLocker _settingsLocker = new AsyncLocker();
+        private static readonly AsyncLocker _authLocker = new AsyncLocker();
 
-        private ClovaVoiceController _clovaVoiceController;
-        public ClovaVoiceController ClovaVoiceController { get => _clovaVoiceController; set => SetProperty(ref _clovaVoiceController, value); }
+        private static Func<Action, Task> callOnUiThread = async (handler) =>
+            await Application.Current.Dispatcher.InvokeAsync(handler);
+
+        private Auth _auth;
+        public Auth Auth { get => _auth; set => SetObservableProperty(ref _auth, value); }
+
+        private ClovaVoiceAPIController _clovaVoiceController;
+        public ClovaVoiceAPIController ClovaVoiceController { get => _clovaVoiceController; set => SetProperty(ref _clovaVoiceController, value); }
 
         private AppSettings _appSettings;
-        public AppSettings AppSettings { get => _appSettings; set => SetProperty(ref _appSettings, value); }
+        public AppSettings AppSettings { get => _appSettings; set => SetObservableProperty(ref _appSettings, value); }
 
         private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
         public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
@@ -77,13 +85,6 @@ namespace VoiceGenerator.ViewModel
         }
         #endregion
 
-        public void PlaySound(string filename)
-        {
-            media.Stop();
-            Uri soundUri = new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename));
-            media.Open(new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename)));
-        }
-
         public HomeViewModel()
         {
             Initialize();
@@ -93,13 +94,38 @@ namespace VoiceGenerator.ViewModel
         {
             // 화자 데이터 가져오기, 정해져있음
             // FIXME: 혹시 API 요청으로 리스트 가져올 수 있으면 가져와서 넣어주기
-            _appSettings = await JsonHelper.ReadFileAsync<AppSettings>("Resources/appsettings.json");
-            _auth = await JsonHelper.ReadFileAsync<Auth>("Resources/auth.json");
-            _clovaVoiceController = new ClovaVoiceController(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, settings: _appSettings.TTSSettings);
+            _appSettings = await _settingsLocker.LockAsync(
+                async () => await JsonHelper.ReadFileAsync<AppSettings>("Resources/appsettings.json"));
+            _appSettings.PropertyChanged += async (s, e) =>
+            {
+                await _settingsLocker.LockAsync(
+                    async () => await JsonHelper.WriteFileAsync("Resources/appsettings.json", _appSettings));
+            };
+            _auth = await _authLocker.LockAsync(
+                async () => await JsonHelper.ReadFileAsync<Auth>("Resources/auth.json"));
+            _auth.PropertyChanged += async (s, e) =>
+            {
+                await _authLocker.LockAsync(
+                    async () => await JsonHelper.WriteFileAsync("Resources/auth.json", _auth));
+            };
+
+            await InitializeClova();
+        }
+
+        private async Task InitializeClova()
+        {
+            _clovaVoiceController = new ClovaVoiceAPIController(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, settings: _appSettings.ClovaSettings);
             await _clovaVoiceController.Initialize();
             _clovaVoiceController.Speakers.ForEach(item => Speakers.Add(item));
 
             SelectedSpeaker = Speakers.FirstOrDefault();
+        }
+
+        public void PlaySound(string filename)
+        {
+            media.Stop();
+            Uri soundUri = new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename));
+            media.Open(new Uri(Path.Combine(Application.Current.StartupUri.ToString(), filename)));
         }
     }
 }

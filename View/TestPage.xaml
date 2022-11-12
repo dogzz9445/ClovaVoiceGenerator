@@ -10,5 +10,30 @@
 
     <Grid>
         <Button Command="{Binding TestCreateFileCommand}" />
+        <Slider Minimum="0"
+                Maximum="50"
+                Value="35" />
+        <Slider Minimum="0"
+                Maximum="50"
+                Value="35" />
+        <Slider TickFrequency="5"
+                Orientation="Horizontal"
+                TickPlacement="BottomRight"
+                Minimum="0"
+                Maximum="50"
+                Value="10"
+                SelectionStart="0"
+                SelectionEnd="20"
+                IsSelectionRangeEnabled="True" />
+        <ListBox Style="{StaticResource MaterialDesignChoiceChipPrimaryListBox}"
+                 x:Name="RadioButtonGroupChoiceChipPrimary">
+            <ListBoxItem Content="Mercury" />
+            <ListBoxItem IsSelected="True"
+                         Content="Venus" />
+            <ListBoxItem Content="Earth" />
+            <ListBoxItem IsEnabled="False"
+                         Content="Pluto" />
+        </ListBox>
+
     </Grid>
 </Page>
