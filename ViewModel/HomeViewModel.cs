@@ -32,8 +32,12 @@ namespace VoiceGenerator.ViewModel
         private ClovaVoiceAPIController _clovaVoiceController;
         public ClovaVoiceAPIController ClovaVoiceController { get => _clovaVoiceController; set => SetProperty(ref _clovaVoiceController, value); }
 
-        private AppSettings _appSettings;
-        public AppSettings AppSettings { get => _appSettings; set => SetObservableProperty(ref _appSettings, value); }
+        // TEST
+        private int _sliderValue;
+        public int SliderVolumeValue { get => _sliderValue; set => SetProperty(ref _sliderValue, value); }
+
+        private AppSettings _settings;
+        public AppSettings Settings { get => _settings; set => SetObservableProperty(ref _settings, value); }
 
         private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
         public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
@@ -87,38 +91,60 @@ namespace VoiceGenerator.ViewModel
 
         public HomeViewModel()
         {
-            Initialize();
+            InitializeAsync();
+
+            Settings = new AppSettings();
+
+            PropertyChanged += HomeViewModel_PropertyChanged;
         }
 
-        private async void Initialize()
+        private void HomeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(SliderVolumeValue))
+            {
+                Settings.VoiceSettings.Volume = SliderVolumeValue;
+            }
+        }
+
+        private async void InitializeAsync()
         {
             // 화자 데이터 가져오기, 정해져있음
             // FIXME: 혹시 API 요청으로 리스트 가져올 수 있으면 가져와서 넣어주기
-            _appSettings = await _settingsLocker.LockAsync(
+            Settings = await _settingsLocker.LockAsync(
                 async () => await JsonHelper.ReadFileAsync<AppSettings>("Resources/appsettings.json"));
-            _appSettings.PropertyChanged += async (s, e) =>
+            Settings.PropertyChanged += async (s, e) =>
             {
                 await _settingsLocker.LockAsync(
-                    async () => await JsonHelper.WriteFileAsync("Resources/appsettings.json", _appSettings));
+                    async () => await JsonHelper.WriteFileAsync("Resources/appsettings.json", _settings));
             };
-            _auth = await _authLocker.LockAsync(
+            Auth = await _authLocker.LockAsync(
                 async () => await JsonHelper.ReadFileAsync<Auth>("Resources/auth.json"));
-            _auth.PropertyChanged += async (s, e) =>
+            Auth.PropertyChanged += async (s, e) =>
             {
                 await _authLocker.LockAsync(
                     async () => await JsonHelper.WriteFileAsync("Resources/auth.json", _auth));
             };
 
-            await InitializeClova();
+            await InitializeClovaAsync();
         }
 
-        private async Task InitializeClova()
+        private async Task InitializeClovaAsync()
         {
-            _clovaVoiceController = new ClovaVoiceAPIController(clientId: Auth.ClientId, clientSecret: Auth.ClientSecret, settings: _appSettings.ClovaSettings);
-            await _clovaVoiceController.Initialize();
-            _clovaVoiceController.Speakers.ForEach(item => Speakers.Add(item));
+            ClovaVoiceController = new ClovaVoiceAPIController(
+                clientId: Auth.ClientId,
+                clientSecret: Auth.ClientSecret,
+                settings: Settings.VoiceSettings,
+                speakerListFileName: Settings.SpeakerListFileName);
+
+            await ClovaVoiceController.InitializeAsync();
+            ClovaVoiceController.Speakers.ForEach(item => Speakers.Add(item));
 
             SelectedSpeaker = Speakers.FirstOrDefault();
+            SliderVolumeValue = Settings.VoiceSettings.Volume ?? 0;
+
+            //await callOnUiThread.Invoke(() =>
+            //{
+            //});
         }
 
         public void PlaySound(string filename)

@@ -6,12 +6,16 @@
       xmlns:local="clr-namespace:VoiceGenerator.View"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:clova="clr-namespace:VoiceGenerator.Clova"
+      xmlns:viewmodel="clr-namespace:VoiceGenerator.ViewModel"
+      xmlns:converter="clr-namespace:VoiceGenerator.Converters"
       mc:Ignorable="d"
       TextElement.Foreground="{DynamicResource MaterialDesignBody}"
       d:DesignHeight="1080"
       d:DesignWidth="1920"
       Title="HomePage">
 
+    <!--d:DataContext="{d:DesignInstance Type=viewmodel:HomeViewModel}"-->
+    
     <Page.Resources>
         
         <!-- 데이터템플릿 보이스 샘플 -->
@@ -70,6 +74,7 @@
         </DataTemplate>
 
         <clova:SpeakerToStringValueConverter x:Key="SpeakerToStringValueConverter" />
+        <converter:DoubleToIntConverter x:Key="DoubleToIntConverter" />
     </Page.Resources>
 
     <Grid Margin="8">
@@ -177,6 +182,7 @@
                               Background="#12FFFFFF">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="48" />
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
@@ -184,17 +190,24 @@
                                        Style="{StaticResource MaterialDesignTextBlock}"
                                        VerticalAlignment="Center"
                                        Text="볼륨(volume) :" />
-                            <Slider Grid.Column="1"
+                            <TextBlock Grid.Column="1"
+                                       Style="{StaticResource MaterialDesignTextBlock}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding ElementName=sliderVolume, Path=Value, Converter={StaticResource DoubleToIntConverter}}" />
+                            <Slider Grid.Column="2"
                                     Margin="8"
+                                    x:Name="sliderVolume"
                                     VerticalAlignment="Center"
                                     Minimum="0"
                                     Maximum="100"
-                                    Value="{Binding Path=AppSettings.ClovaSettings.Volume, Mode=TwoWay}" />
+                                    Value="{Binding Path=SliderVolumeValue, Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
                         </Grid>
                         <Grid Margin="8"
                               Background="#12FFFFFF">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="48" />
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
@@ -202,8 +215,14 @@
                                        Style="{StaticResource MaterialDesignTextBlock}"
                                        VerticalAlignment="Center"
                                        Text="속도(speed) :" />
-                            <Slider Grid.Column="1"
+                            <TextBlock Grid.Column="1"
+                                       Style="{StaticResource MaterialDesignTextBlock}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding ElementName=sliderSpeed, Path=Value, Converter={StaticResource DoubleToIntConverter}}" />
+                            <Slider Grid.Column="2"
                                     Margin="8"
+                                    x:Name="sliderSpeed"
                                     VerticalAlignment="Center"
                                     Minimum="0"
                                     Maximum="100"
@@ -213,6 +232,7 @@
                               Background="#12FFFFFF">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="48" />
                                 <ColumnDefinition Width="1*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="0"
@@ -220,8 +240,14 @@
                                        Style="{StaticResource MaterialDesignTextBlock}"
                                        VerticalAlignment="Center"
                                        Text="음고(pitch) :" />
-                            <Slider Grid.Column="1"
+                            <TextBlock Grid.Column="1"
+                                       Style="{StaticResource MaterialDesignTextBlock}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       Text="{Binding ElementName=sliderPitch, Path=Value, Converter={StaticResource DoubleToIntConverter}}" />
+                            <Slider Grid.Column="2"
                                     Margin="8"
+                                    x:Name="sliderPitch"
                                     VerticalAlignment="Center"
                                     Minimum="0"
                                     Maximum="100"
@@ -286,12 +312,15 @@
                                              Margin="8"
                                              materialDesign:ElevationAssist.Elevation="Dp8"
                                              Background="#12FFFFFF">
-                            <StackPanel>
-                                <TextBlock Grid.Row="2"
-                                           Margin="8"
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="48" />
+                                    <RowDefinition Height="1*" />
+                                </Grid.RowDefinitions>
+                                <TextBlock Margin="8"
                                            Style="{StaticResource MaterialDesignHeadline5TextBlock}"
                                            Text="보이스 샘플" />
-                                <Grid Grid.Row="3"
+                                <Grid Grid.Row="1"
                                       Margin="8"
                                       Background="#12FFFFFF"
                                       VerticalAlignment="Stretch"
@@ -302,7 +331,7 @@
                                               ScrollViewer.VerticalScrollBarVisibility="Visible"
                                               ScrollViewer.CanContentScroll="True" />
                                 </Grid>
-                            </StackPanel>
+                            </Grid>
                         </materialDesign:Card>
                     </StackPanel>
                 </materialDesign:Card>
@@ -312,7 +341,8 @@
                     Margin="8">
                 <materialDesign:Card UniformCornerRadius="8"
                                      materialDesign:ElevationAssist.Elevation="Dp8"
-                                     Background="#12FFFFFF">
+                                     Background="#12FFFFFF"
+                                     >
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="64" />
@@ -377,13 +407,13 @@
                                         </StackPanel>
                                     </Button>
                                     <Grid Width="124">
-                                        <Button Style="{StaticResource MaterialDesignRaisedButton}"
+                                        <!--<Button Style="{StaticResource MaterialDesignRaisedButton}"
                                                 materialDesign:ButtonProgressAssist.Value="-1"
                                                 materialDesign:ButtonProgressAssist.IsIndicatorVisible="True"
                                                 materialDesign:ButtonProgressAssist.IsIndeterminate="False"
                                                 Content="Indeterminate"
                                                 Margin="2,0"
-                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                                                IsEnabled="{Binding DataContext.ControlsEnabled, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />-->
                                     </Grid>
                                 </StackPanel>
                             </StackPanel>

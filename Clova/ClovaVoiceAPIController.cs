@@ -19,13 +19,16 @@ namespace VoiceGenerator.Clova
         private const string CONTENT_TYPE = "application/x-www-form-urlencoded";
         #endregion
 
-        private const string SpeakerListFileName = "Resources/speakers.json";
+        private string _speakerListFileName;
 
         private string _clientId;
         private string _clientSecret;
 
-        private ClovaSettings _settings;
-        public ClovaSettings Settings { get => _settings; set => _settings = value; }
+        private string _logMessage = "";
+        public string LogMessage { get => _logMessage; set => SetProperty(ref _logMessage, value); }
+
+        private ClovaSettings _voiceSettings;
+        public ClovaSettings VoiceSettings { get => _voiceSettings; set => _voiceSettings = value; }
         
         private ClovaSpeaker _selectedSpeaker;
         public ClovaSpeaker SelectedSpeaker { get => _selectedSpeaker; set => _selectedSpeaker = value; }
@@ -37,20 +40,23 @@ namespace VoiceGenerator.Clova
             string clientId,
             string clientSecret,
             ClovaSettings settings = null,
-            ClovaSpeaker speaker = null)
+            ClovaSpeaker speaker = null,
+            string speakerListFileName = null)
         {
             _clientId = clientId;
             _clientSecret = clientSecret;
-            _settings = settings ??= new ClovaSettings();
+            _voiceSettings = settings ??= new ClovaSettings();
             _selectedSpeaker = speaker ??= Speakers.FirstOrDefault(item => item.KoreanName == "아라");
+            _speakerListFileName = string.IsNullOrEmpty(speakerListFileName) ? "Resources/speakers.json" : speakerListFileName;
         }
 
-        public async Task Initialize()
+        public async Task InitializeAsync()
         {
-            await LoadSpeakers(SpeakerListFileName);
+            await LoadSpeakersAsync(_speakerListFileName);
+            LogMessage = "초기화 완료";
         }
 
-        public async Task<List<ClovaSpeaker>> LoadSpeakers(string fileName)
+        public async Task<List<ClovaSpeaker>> LoadSpeakersAsync(string fileName)
         {
             var speakers = await JsonHelper.ReadFileAsync<List<ClovaSpeaker>>(fileName);
             if (speakers != null)
@@ -92,18 +98,30 @@ namespace VoiceGenerator.Clova
         {
             if (string.IsNullOrEmpty(_clientId))
             {
+#if DEBUG
                 throw new ArgumentNullException("Null is ", nameof(_clientId));
+#else
+                return null;
+#endif
             }
             if (string.IsNullOrEmpty(_clientSecret))
             {
+#if DEBUG
                 throw new ArgumentNullException("Null is ", nameof(_clientSecret));
+#else
+                return null;
+#endif
             }
             if (string.IsNullOrEmpty(text))
             {
+#if DEBUG
                 throw new ArgumentNullException("Null is ", nameof(text));
+#else
+                return null;
+#endif
             }
 
-            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={SelectedSpeaker.Name}&volume={Settings.Volume}&speed={Settings.Speed}&pitch={Settings.Pitch}&format={Settings.Format}&text={text}");
+            byte[] byteDataParams = Encoding.UTF8.GetBytes($"speaker={SelectedSpeaker.Name}&volume={VoiceSettings.Volume}&speed={VoiceSettings.Speed}&pitch={VoiceSettings.Pitch}&format={VoiceSettings.Format}&text={text}");
 
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(URL_CLOVE_TTS);
             request.Method = REQUEST_METHOD;
@@ -124,6 +142,9 @@ namespace VoiceGenerator.Clova
             }
 
             HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+
+            // TODO:
+            // API 에러 내용 표시
             if (response.StatusCode is not >= (HttpStatusCode)200 and < (HttpStatusCode)300)
             {
                 throw new WebException($"Web request response exception: {response.StatusDescription}");
@@ -148,7 +169,7 @@ namespace VoiceGenerator.Clova
         {
             SelectedSpeaker = speaker ?? SelectedSpeaker;
             string directoryName = "Resources/voice";
-            string filename = $"voice.{Settings.Format}";
+            string filename = $"voice.{VoiceSettings.Format}";
             string fullFilename = Path.Combine(directoryName, filename);
             string generatedFilename = await RequestAndSaveAsync(fullFilename, text);
             return generatedFilename;

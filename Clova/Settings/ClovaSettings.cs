@@ -31,14 +31,14 @@ namespace VoiceGenerator.Clova
         private string? _speakerName;
 
         [JsonPropertyName("volume")]
-        public int? Volume { get => _volume; set => _volume = value; }
+        public int? Volume { get => _volume; set => SetProperty(ref _volume, value); }
         [JsonPropertyName("speed")]
-        public int? Speed { get => _speed; set => _speed = value; }
+        public int? Speed { get => _speed; set => SetProperty(ref _speed, value); }
         [JsonPropertyName("pitch")]
-        public int? Pitch { get => _pitch; set => _pitch = value; }
+        public int? Pitch { get => _pitch; set => SetProperty(ref _pitch, value); }
         [JsonPropertyName("format")]
-        public ClovaSoundFormat? Format { get => _format; set => _format = value; }
+        public ClovaSoundFormat? Format { get => _format; set => SetProperty(ref _format, value); }
         [JsonPropertyName("speaker_name")]
-        public string? SpeakerName { get => _speakerName; set => _speakerName = value; }
+        public string? SpeakerName { get => _speakerName; set => SetProperty(ref _speakerName, value); }
     }
 }

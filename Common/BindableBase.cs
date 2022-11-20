@@ -25,7 +25,7 @@ namespace Common
             return true;
         }
 
-        protected bool? SetObservableProperty<T>(ref T? storage, T value, [CallerMemberName] string? propertyName = null) where T : INotifyPropertyChanged
+        protected bool? SetObservableProperty<T>(ref T? storage, T? value, [CallerMemberName] string? propertyName = null) where T : INotifyPropertyChanged
         {
             if (storage != null)
             {

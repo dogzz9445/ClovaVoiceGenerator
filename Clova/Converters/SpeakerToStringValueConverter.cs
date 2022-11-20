@@ -20,6 +20,7 @@ namespace VoiceGenerator.Clova
 
         public object ConvertBack(object value, System.Type targetType, object parameter, CultureInfo culture)
         {
+            // 불필요, 삭제
             //string name = (string)value;
             //return ClovaVoiceAPIController.Speakers.FirstOrDefault(item => item.KoreanName == name);
             return null;
