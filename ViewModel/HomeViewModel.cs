@@ -29,8 +29,8 @@ namespace VoiceGenerator.ViewModel
         private Auth _auth;
         public Auth Auth { get => _auth; set => SetObservableProperty(ref _auth, value); }
 
-        private ClovaVoiceAPIController _clovaVoiceController;
-        public ClovaVoiceAPIController ClovaVoiceController { get => _clovaVoiceController; set => SetProperty(ref _clovaVoiceController, value); }
+        private ClovaVoiceController _voiceController;
+        public ClovaVoiceController VoiceController { get => _voiceController; set => SetProperty(ref _voiceController, value); }
 
         private AppSettings _settings;
         public AppSettings Settings { get => _settings; set => SetObservableProperty(ref _settings, value); }
@@ -71,7 +71,7 @@ namespace VoiceGenerator.ViewModel
         {
             get => _convertConversionTextCommand ??= new DelegateCommand(async () =>
             {
-                ConversionText = await ClovaVoiceController.GenerateAsync(ConversionText, SelectedSpeaker);
+                ConversionText = await VoiceController.GenerateAsync(ConversionText, SelectedSpeaker);
             });
         }
 
@@ -98,13 +98,19 @@ namespace VoiceGenerator.ViewModel
         {
             InitializeAsync();
 
-            Settings = new AppSettings();
-
             PropertyChanged += HomeViewModel_PropertyChanged;
         }
 
         private void HomeViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
+            if (e.PropertyName == nameof(SliderVolumeValue))
+            {
+                Settings.VoiceSettings.Volume = SliderVolumeValue;
+            }
+            if (e.PropertyName == nameof(SliderVolumeValue))
+            {
+                Settings.VoiceSettings.Volume = SliderVolumeValue;
+            }
             if (e.PropertyName == nameof(SliderVolumeValue))
             {
                 Settings.VoiceSettings.Volume = SliderVolumeValue;
@@ -120,14 +126,15 @@ namespace VoiceGenerator.ViewModel
             Settings.PropertyChanged += async (s, e) =>
             {
                 await _settingsLocker.LockAsync(
-                    async () => await JsonHelper.WriteFileAsync("Resources/appsettings.json", _settings));
+                    async () => await JsonHelper.WriteFileAsync("Resources/appsettings.json", Settings));
             };
+
             Auth = await _authLocker.LockAsync(
                 async () => await JsonHelper.ReadFileAsync<Auth>("Resources/auth.json"));
             Auth.PropertyChanged += async (s, e) =>
             {
                 await _authLocker.LockAsync(
-                    async () => await JsonHelper.WriteFileAsync("Resources/auth.json", _auth));
+                    async () => await JsonHelper.WriteFileAsync("Resources/auth.json", Auth));
             };
 
             await InitializeClovaAsync();
@@ -135,17 +142,34 @@ namespace VoiceGenerator.ViewModel
 
         private async Task InitializeClovaAsync()
         {
-            ClovaVoiceController = new ClovaVoiceAPIController(
+            VoiceController = new ClovaVoiceController(
                 clientId: Auth.ClientId,
                 clientSecret: Auth.ClientSecret,
                 settings: Settings.VoiceSettings,
                 speakerListFileName: Settings.SpeakerListFileName);
 
-            await ClovaVoiceController.InitializeAsync();
-            ClovaVoiceController.Speakers.ForEach(item => Speakers.Add(item));
+            await VoiceController.InitializeAsync();
+            VoiceController.Speakers.ForEach(item => Speakers.Add(item));
 
             SelectedSpeaker = Speakers.FirstOrDefault();
             SliderVolumeValue = Settings.VoiceSettings.Volume ?? 0;
+            SliderSpeedValue = Settings.VoiceSettings.Speed ?? 0;
+            SliderPitchValue = Settings.VoiceSettings.Pitch ?? 0;
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(SliderVolumeValue))
+                {
+                    Settings.VoiceSettings.Volume = SliderVolumeValue;
+                }
+                if (e.PropertyName == nameof(SliderSpeedValue))
+                {
+                    Settings.VoiceSettings.Speed = SliderSpeedValue;
+                }
+                if (e.PropertyName == nameof(SliderPitchValue))
+                {
+                    Settings.VoiceSettings.Pitch = SliderPitchValue;
+                }
+            };
 
             //await callOnUiThread.Invoke(() =>
             //{

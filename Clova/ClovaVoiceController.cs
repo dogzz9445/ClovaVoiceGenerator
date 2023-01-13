@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoiceGenerator.Clova
 {
-    public class ClovaVoiceAPIController : BindableBase
+    public class ClovaVoiceController : BindableBase
     {
         #region 정적 Property
         private const string URL_CLOVE_TTS = "https://naveropenapi.apigw.ntruss.com/tts-premium/v1/tts";
@@ -36,7 +36,7 @@ namespace VoiceGenerator.Clova
         public List<ClovaSpeaker> _speakers;
         public List<ClovaSpeaker> Speakers { get => _speakers ??= new List<ClovaSpeaker>(); }
 
-        public ClovaVoiceAPIController(
+        public ClovaVoiceController(
             string clientId,
             string clientSecret,
             ClovaSettings settings = null,
