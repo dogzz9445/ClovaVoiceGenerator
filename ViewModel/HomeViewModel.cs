@@ -32,12 +32,17 @@ namespace VoiceGenerator.ViewModel
         private ClovaVoiceAPIController _clovaVoiceController;
         public ClovaVoiceAPIController ClovaVoiceController { get => _clovaVoiceController; set => SetProperty(ref _clovaVoiceController, value); }
 
-        // TEST
-        private int _sliderValue;
-        public int SliderVolumeValue { get => _sliderValue; set => SetProperty(ref _sliderValue, value); }
-
         private AppSettings _settings;
         public AppSettings Settings { get => _settings; set => SetObservableProperty(ref _settings, value); }
+
+        private int _sliderVolumeValue;
+        public int SliderVolumeValue { get => _sliderVolumeValue; set => SetProperty(ref _sliderVolumeValue, value); }
+
+        private int _sliderSpeedValue;
+        public int SliderSpeedValue { get => _sliderSpeedValue; set => SetProperty(ref _sliderSpeedValue, value); }
+
+        private int _sliderPitchValue;
+        public int SliderPitchValue { get => _sliderPitchValue; set => SetProperty(ref _sliderPitchValue, value); }
 
         private readonly ObservableCollection<ClovaSpeaker> _speakers = new ObservableCollection<ClovaSpeaker>();
         public ObservableCollection<ClovaSpeaker> Speakers { get => _speakers; }
